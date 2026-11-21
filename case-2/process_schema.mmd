@@ -1,0 +1,32 @@
+%%{init: {'theme':'base', 'themeVariables': {'primaryColor':'#eef4fb','primaryBorderColor':'#4a6fa5','lineColor':'#4a6fa5','fontSize':'15px'}}}%%
+flowchart TD
+    Start((Старт)) --> A[Регистрация заявки]
+    A --> B[Первичная проверка]
+    B -- "accept (1129)" --> C[Согласование руководителем]
+    B -- "reject (45)" --> ENDREJ[Заявка отклонена]
+
+    C -- "accept (911)" --> D{Проверка бюджета}
+    C -- "return (174)" --> E[Доработка заявки]
+    C -- "reject (18)" --> ENDREJ
+    C -- "cancel (26)" --> ENDCANC[Заявка отменена]
+
+    E -- "174, цикл" --> B
+
+    D -- "Amount < 150 000 (702)" --> G[Исполнение закупки]
+    D -- "Amount >= 150 000 (209)" --> F[Дополнительное согласование]
+    F -- "accept (209)" --> G
+
+    G -- "911" --> ENDOK[Заявка выполнена]
+
+    ENDOK --> Fin((Финал))
+    ENDREJ --> Fin
+    ENDCANC --> Fin
+
+    classDef startend fill:#4a6fa5,stroke:#2c4a73,color:#fff;
+    classDef okend fill:#d4edda,stroke:#2f8f46,color:#1b5e20;
+    classDef badend fill:#f8d7da,stroke:#c62828,color:#7a1212;
+    classDef gw fill:#fff3cd,stroke:#b8860b,color:#5c4500;
+    class Start,Fin startend;
+    class ENDOK okend;
+    class ENDREJ,ENDCANC badend;
+    class D gw;
